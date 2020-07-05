@@ -1,3 +1,5 @@
+// tek tolko
+
 const path = require('path')                // built in module, no installation needed
 const express = require ('express')    
 const hbs = require ('hbs')                 // za potrebe template-a (partials-a -> just part of a web page)
