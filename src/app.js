@@ -1,12 +1,11 @@
-// tek tolko
-
 const path = require('path')                // built in module, no installation needed
 const express = require ('express')    
 const hbs = require ('hbs')                 // za potrebe template-a (partials-a -> just part of a web page)
 const forecast = require ('./utils/forecast')   
 const geocode = require ('./utils/geocode')  
 
-const app = express()                                            // no arguments
+const app = express()                              // no arguments
+const port = process.env.PORT || 3000             // envirenment variables (from Heroku) ili 3000 ako nema process.env
 
 // Define paths for Express config
 const publicDirPath = path.join(__dirname, '../public')
@@ -100,6 +99,6 @@ app.get('*', (req, res) => {        // * -> sve što nije jednako onom do sada s
     })
 })
 
-app.listen(3000, () => {                              // start up the server at port 3000
-    console.log('Server is up on port 3000.')
+app.listen(port, () => {                             
+    console.log('Server is up on port ' + port)
 }) 
