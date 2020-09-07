@@ -44,28 +44,41 @@ app.get ('/help', (req, res) => {
 })
 
 app.get ('/weather', (req, res) => {
-    if(!req.query.address){             // http://localhost:3000/weather?address=Botinec
+    if (!req.query.address && (!req.query.longitude || !req.query.latitude)){             // http://localhost:3000/weather?address=Botinec
         return res.send ({
             error: 'No address provided'
         })
-    }
-    geocode(req.query.address, (error, {longitude, latitude, location} = {}) => {   
-        if(error){
-            return res.send ({error})  // Return jer ne želimo da se program nastavi nakon što ispiše (zato ne treba else if nakon })
-        }
-
-        forecast(longitude, latitude, (error, forecastData) => {    
+    } else if (req.query.address) {
+        geocode(req.query.address, (error, {longitude, latitude, location} = {}) => {   
+            if(error){
+                return res.send ({error})  // Return jer ne želimo da se program nastavi nakon što ispiše (zato ne treba else if nakon })
+            }
+            forecast(longitude, latitude, (error, forecastData, locationData) => {    
+                if(error){
+                    return res.send ({error})  
+                }
+                res.send ({
+                    address: req.query.address,
+                    location,
+                    forecast: forecastData
+                }) 
+            })
+        })
+    } else if (req.query.longitude && req.query.latitude) {
+        forecast(req.query.longitude, req.query.latitude, (error, forecastData, locationData) => {    // zamijenio
             if(error){
                 return res.send ({error})  
             }
             res.send ({
-                address: req.query.address,
-                location,
+                location: locationData,
                 forecast: forecastData
             }) 
         })
-    })
- } )
+    }
+    
+})
+
+
  
 
 
